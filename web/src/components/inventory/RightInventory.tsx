@@ -7,8 +7,10 @@ const RightInventory: React.FC = () => {
   const rightInventory = useAppSelector(selectRightInventory);
 
   return (
-    <div className="ox-right-panel">
-      <InventoryGrid inventory={rightInventory} variant="secondary" />
+    <div className="ox-col ox-col-right">
+      <div className="ox-panel">
+        <InventoryGrid inventory={rightInventory} variant="secondary" />
+      </div>
       <SecondaryInventoryStatus inventory={rightInventory} />
     </div>
   );

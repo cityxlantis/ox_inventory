@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import useNuiEvent from '../../hooks/useNuiEvent';
-import ActionBar from './ActionBar';
 import InventoryHotbar from './InventoryHotbar';
 import { useAppDispatch } from '../../store';
 import { refreshSlots, setAdditionalMetadata, setupInventory } from '../../store/inventory';
@@ -50,7 +49,6 @@ const Inventory: React.FC = () => {
             <CharacterCenter />
             <RightInventory />
           </div>
-          <ActionBar />
           <Tooltip />
           <InventoryContext />
         </div>
