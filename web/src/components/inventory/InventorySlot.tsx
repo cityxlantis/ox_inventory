@@ -127,7 +127,9 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
       ref={refs}
       onContextMenu={handleContext}
       onClick={handleClick}
-      className="inventory-slot"
+      className={`inventory-slot${isSlotWithItem(item) ? ' inventory-slot-filled' : ''}${
+        isOver ? ' inventory-slot-over' : ''
+      }`}
       style={{
         filter:
           !canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) || !canCraftItem(item, inventoryType)
@@ -135,9 +137,13 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
             : undefined,
         opacity: isDragging ? 0.4 : 1.0,
         backgroundImage: `url(${item?.name ? getItemUrl(item as SlotWithItem) : 'none'}`,
-        border: isOver ? '1px dashed rgba(255,255,255,0.4)' : '',
       }}
     >
+      {/* thin red corner accents (decorative) */}
+      <span className="slot-corner slot-corner-tl" aria-hidden />
+      <span className="slot-corner slot-corner-tr" aria-hidden />
+      <span className="slot-corner slot-corner-bl" aria-hidden />
+      <span className="slot-corner slot-corner-br" aria-hidden />
       {isSlotWithItem(item) && (
         <div
           className="item-slot-wrapper"
@@ -154,26 +160,9 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
             }
           }}
         >
-          <div
-            className={
-              inventoryType === 'player' && item.slot <= 5 ? 'item-hotslot-header-wrapper' : 'item-slot-header-wrapper'
-            }
-          >
+          <div className="item-slot-header-wrapper">
             {inventoryType === 'player' && item.slot <= 5 && <div className="inventory-slot-number">{item.slot}</div>}
-            <div className="item-slot-info-wrapper">
-              <p>
-                {item.weight > 0
-                  ? item.weight >= 1000
-                    ? `${(item.weight / 1000).toLocaleString('en-us', {
-                        minimumFractionDigits: 2,
-                      })}kg `
-                    : `${item.weight.toLocaleString('en-us', {
-                        minimumFractionDigits: 0,
-                      })}g `
-                  : ''}
-              </p>
-              <p>{item.count ? item.count.toLocaleString('en-us') + `x` : ''}</p>
-            </div>
+            {item.count ? <div className="inventory-slot-count">{item.count.toLocaleString('en-us')}</div> : null}
           </div>
           <div>
             {inventoryType !== 'shop' && item?.durability !== undefined && (

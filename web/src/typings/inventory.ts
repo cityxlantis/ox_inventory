@@ -15,4 +15,16 @@ export type Inventory = {
   maxWeight?: number;
   label?: string;
   groups?: Record<string, number>;
+  // Optional presentation-only fields consumed by the redesigned header/clothing UI.
+  // These are ignored by all existing reducers and never mutate inventory state.
+  money?: { cash?: number; bank?: number };
+  clothing?: Record<string, ClothingSlotData>;
+};
+
+export type ClothingSlotData = {
+  label?: string;
+  image?: string;
+  drawable?: number;
+  count?: number;
+  equipped?: boolean;
 };

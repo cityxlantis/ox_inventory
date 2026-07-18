@@ -14,10 +14,10 @@ const colorMixer = (rgbA: number[], rgbB: number[], amountToMix: number) => {
 };
 
 const COLORS = {
-  // Colors used - https://materialui.co/flatuicolors
-  primaryColor: [231, 76, 60], // Red (Pomegranate)
-  secondColor: [39, 174, 96], // Green (Nephritis)
-  accentColor: [211, 84, 0], // Orange (Oragne)
+  // Oxlyn theme
+  primaryColor: [239, 63, 67], // Accent red (#EF3F43)
+  secondColor: [46, 204, 113], // Green (#2ECC71)
+  accentColor: [211, 84, 0], // Orange (transition)
 };
 
 const WeightBar: React.FC<{ percent: number; durability?: boolean }> = ({ percent, durability }) => {
@@ -27,9 +27,8 @@ const WeightBar: React.FC<{ percent: number; durability?: boolean }> = ({ percen
         ? percent < 50
           ? colorMixer(COLORS.accentColor, COLORS.primaryColor, percent / 100)
           : colorMixer(COLORS.secondColor, COLORS.accentColor, percent / 100)
-        : percent > 50
-          ? colorMixer(COLORS.primaryColor, COLORS.accentColor, percent / 100)
-          : colorMixer(COLORS.accentColor, COLORS.secondColor, percent / 50),
+        : // weight bar: always the accent red per the redesign
+          `rgb(${COLORS.primaryColor[0]}, ${COLORS.primaryColor[1]}, ${COLORS.primaryColor[2]})`,
     [durability, percent]
   );
 

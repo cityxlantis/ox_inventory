@@ -7,8 +7,26 @@ $secondaryColorHighlight: #33343f;
 $secondaryColorLight: rgba(0, 0, 0, 0.5);
 $secondaryColorDark: rgba(12, 12, 12, 0.8);
 
+// ── Oxlyn redesign design tokens ─────────────────────────────
+$oxBg: rgba(9, 12, 16, 0.58);
+$oxPanel: rgba(12, 16, 21, 0.72);
+$oxAccent: #ef3f43;
+$oxAccentSoft: rgba(239, 63, 67, 0.65);
+$oxAccentGlow: rgba(239, 63, 67, 0.35);
+$oxText: #f5f7fa;
+$oxTextDim: #8d96a3;
+$oxBorder: rgba(255, 255, 255, 0.08);
+$oxGreen: #2ecc71;
+$oxPurple: #9b6dff;
+$oxHeadFont: 'Rajdhani', 'Oswald', sans-serif;
+$oxBodyFont: 'Inter', sans-serif;
+
+// Responsive slot sizing: clamp keeps the 5x5 grids visible at 1080p and scales down.
 $gridCols: 5;
 $gridRows: 5;
+$slotSize: clamp(58px, 6.1vw, 108px);
+$slotGap: clamp(6px, 0.55vw, 10px);
+
 $gridSize: 10.2vh;
 $gridGap: 2px;
 $containerSize: calc(#{$gridRows} * #{$gridSize + 0.22vh} + #{$gridRows} * #{$gridGap});
@@ -59,33 +77,37 @@ input[type='number']::-webkit-outer-spin-button {
 
 .context-menu-list {
   min-width: 200px;
-  background-color: $mainColor;
-  color: $textColor;
-  padding: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
-  border-radius: 4px;
+  background: $oxPanel;
+  backdrop-filter: blur(12px);
+  color: $oxText;
+  font-family: $oxBodyFont;
+  padding: 6px;
+  border: 1px solid $oxBorder;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   outline: none;
   display: flex;
   flex-direction: column;
 }
 
 .context-menu-item {
-  padding: 8px;
-  border-radius: 4px;
+  padding: 9px 10px;
+  border-radius: 7px;
   background-color: transparent;
   outline: none;
   border: none;
-  color: $textColor;
+  color: $oxText;
+  font-family: $oxBodyFont;
+  font-size: 13px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: background 150ms ease;
   &:active {
     transform: none;
   }
   &:hover {
-    background-color: $secondaryColorHighlight;
+    background-color: $oxAccentSoft;
     cursor: pointer;
   }
 }
@@ -128,56 +150,482 @@ body.inv-dragging {
 }
 
 .inventory-wrapper {
+  position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
-
-  gap: 20px;
+  width: 100%;
+  color: $oxText;
+  font-family: $oxBodyFont;
 }
 
-.inventory-control {
-  display: flex;
+// ── Top-level 3-column layout: left grid | ped/clothing | right grid ──
+.ox-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: start;
+  justify-items: center;
+  gap: clamp(12px, 2vw, 48px);
+  width: min(1720px, 96vw);
+  padding: 3.5vh 3vw 0;
+  box-sizing: border-box;
+}
 
-  .inventory-control-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
+.ox-left-panel,
+.ox-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 20px);
+  width: 100%;
+  max-width: calc(#{$slotSize} * 5 + #{$slotGap} * 4 + 4px);
+}
+
+.ox-right-panel {
+  margin-left: auto;
+}
+
+.ox-left-panel {
+  margin-right: auto;
+}
+
+// ── Branded left header ──
+.ox-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ox-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ox-brand-mark {
+  width: 4px;
+  height: 34px;
+  border-radius: 2px;
+  background: $oxAccent;
+  box-shadow: 0 0 12px $oxAccentGlow;
+}
+
+.ox-brand-title {
+  font-family: $oxHeadFont;
+  font-weight: 700;
+  font-size: clamp(20px, 1.7vw, 30px);
+  letter-spacing: 2px;
+  line-height: 1;
+  color: $oxText;
+}
+
+.ox-brand-sub {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: $oxTextDim;
+  margin-top: 3px;
+}
+
+.ox-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ox-player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.02));
+  border: 1px solid $oxBorder;
+  flex-shrink: 0;
+}
+
+.ox-player-name {
+  font-family: $oxHeadFont;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $oxText;
+}
+
+.ox-player-balances {
+  display: flex;
+  gap: 16px;
+  margin-top: 2px;
+}
+
+.ox-balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $oxText;
+}
+
+.ox-balance-icon {
+  color: $oxGreen;
+  font-weight: 700;
+}
+
+.ox-balance-icon-bank {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: $oxAccent;
+  transform: rotate(45deg);
+}
+
+.ox-pockets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ox-pockets-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ox-pockets-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: $oxAccent;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px $oxAccentGlow;
+}
+
+.ox-pockets-title {
+  font-family: $oxHeadFont;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: $oxText;
+  line-height: 1;
+}
+
+.ox-pockets-sub {
+  font-size: 11px;
+  color: $oxTextDim;
+  margin-top: 2px;
+}
+
+.ox-weight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ox-weight-text {
+  font-size: 12px;
+  color: $oxTextDim;
+}
+
+.ox-weight-percent {
+  font-size: 11px;
+  font-weight: 700;
+  color: $oxAccent;
+  border: 1px solid $oxAccentSoft;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+
+// ── Grids ──
+.ox-grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.ox-grid {
+  display: grid;
+  grid-template-columns: repeat(#{$gridCols}, minmax(0, 1fr));
+  grid-auto-rows: $slotSize;
+  gap: $slotGap;
+  width: 100%;
+  max-height: calc(#{$slotSize} * 5 + #{$slotGap} * 4);
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.ox-secondary-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ox-secondary-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ox-secondary-label {
+  font-family: $oxHeadFont;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $oxText;
+}
+
+.ox-secondary-weight {
+  font-size: 12px;
+  color: $oxTextDim;
+}
+
+// ── Center ped + clothing columns ──
+.ox-center {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 22px);
+  width: 100%;
+  padding-top: 2vh;
+}
+
+.ox-clothing-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 0.9vh, 14px);
+}
+
+.ox-ped-space {
+  flex: 1;
+  min-width: clamp(120px, 12vw, 240px);
+  align-self: stretch;
+}
+
+.ox-clothing-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.ox-clothing-card {
+  position: relative;
+  width: clamp(44px, 3.6vw, 64px);
+  height: clamp(44px, 3.6vw, 64px);
+  border-radius: 12px;
+  background: $oxPanel;
+  border: 1px solid $oxBorder;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $oxTextDim;
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+
+.ox-clothing-slot:hover .ox-clothing-card {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.ox-clothing-equipped .ox-clothing-card {
+  border-color: $oxAccentSoft;
+}
+
+.ox-clothing-image {
+  width: 78%;
+  height: 78%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ox-clothing-empty {
+  color: $oxTextDim;
+  display: flex;
+}
+
+.ox-clothing-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: $oxAccent;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px $oxAccentGlow;
+}
+
+.ox-clothing-indicator {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $oxGreen;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.7);
+}
+
+.ox-clothing-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: $oxTextDim;
+  font-weight: 600;
+}
+
+// ── Secondary inventory empty-state card ──
+.ox-secondary-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: $oxBg;
+  border: 1px solid $oxBorder;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ox-secondary-status-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $oxAccent;
+  border: 1px solid $oxAccentSoft;
+  flex-shrink: 0;
+}
+
+.ox-secondary-status-title {
+  font-family: $oxHeadFont;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: $oxText;
+}
+
+.ox-secondary-status-desc {
+  font-size: 12px;
+  color: $oxTextDim;
+  margin-top: 2px;
+}
+
+// ── Bottom action bar ──
+.ox-action-bar {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.6vw, 14px);
+  padding: 10px 14px;
+  margin-top: 2.4vh;
+  border-radius: 14px;
+  background: $oxPanel;
+  border: 1px solid $oxBorder;
+  backdrop-filter: blur(12px);
+}
+
+.ox-action-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px 10px 4px 4px;
+  margin-right: 4px;
+  border-right: 1px solid $oxBorder;
+}
+
+.ox-action-amount-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: $oxTextDim;
+  font-weight: 700;
+}
+
+.ox-action-amount-input {
+  width: 56px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: $oxText;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: $oxBodyFont;
+  padding: 0;
+}
+
+.ox-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 62px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: $oxText;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease, color 150ms ease;
+  font-family: $oxBodyFont;
+
+  span {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: $oxTextDim;
   }
 
-  .inventory-control-input {
-    transition: 200ms;
-    padding: 16px 8px;
-    border-radius: 2.5%;
-    font-family: $mainFont;
-    font-size: 16px;
-    text-align: center;
-    outline: none;
-    border: none;
-    color: #fff;
-    background-color: $secondaryColor;
-    &:focus-within {
-      background-color: $secondaryColorDark;
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+    span {
+      color: $oxText;
     }
   }
 
-  .inventory-control-button {
-    font-size: 14px;
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.ox-action-active,
+.ox-action-active:hover {
+  background: $oxAccentSoft;
+  color: #fff;
+  span {
     color: #fff;
-    background-color: $secondaryColor;
-    transition: 200ms;
-    padding: 12px 8px;
-    border-radius: 2.5%;
-    border: none;
-    text-transform: uppercase;
-    font-family: $mainFont;
-    width: 100%;
-    font-weight: 500;
-    &:hover {
-      background-color: $secondaryColorDark;
+  }
+}
+
+.ox-action-close {
+  color: $oxAccent;
+  span {
+    color: $oxAccent;
+  }
+  &:hover {
+    background: $oxAccentSoft;
+    color: #fff;
+    span {
+      color: #fff;
     }
   }
 }
@@ -293,28 +741,95 @@ body.inv-dragging {
 
 // inventory slots
 .inventory-slot {
-  background-color: $secondaryColor;
+  background-color: $oxBg;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: 2.5%;
+  background-size: 62%;
+  border-radius: 10px;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
-  background-size: 7vh;
-  color: $textColor;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  color: $oxText;
+  border: 1px solid $oxBorder;
+  backdrop-filter: blur(8px);
+  transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+  overflow: hidden;
+}
+
+.inventory-slot-filled {
+  border-color: $oxAccentSoft;
+}
+
+.inventory-slot-filled:hover {
+  transform: translateY(-2px);
+  background-color: $oxPanel;
+  box-shadow: 0 0 14px $oxAccentGlow;
+}
+
+.inventory-slot-over {
+  border-color: $oxGreen !important;
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+}
+
+// thin red corner accents
+.slot-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: $oxAccentSoft;
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  opacity: 0.9;
+}
+.slot-corner-tl {
+  top: 4px;
+  left: 4px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.slot-corner-tr {
+  top: 4px;
+  right: 4px;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+.slot-corner-bl {
+  bottom: 4px;
+  left: 4px;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.slot-corner-br {
+  bottom: 4px;
+  right: 4px;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.inventory-slot-count {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: $oxAccent;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: $oxBodyFont;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 0 8px $oxAccentGlow;
 }
 
 .inventory-slot-label-box {
-  background-color: $mainColor;
-  color: $textColor;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0));
+  color: $oxText;
   text-align: center;
-  border-bottom-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  border-top-color: rgba(0, 0, 0, 0.2);
-  border-top-style: inset;
-  border-top-width: 1px;
 }
 
 .inventory-slot-label-text {
@@ -322,21 +837,31 @@ body.inv-dragging {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 2px 3px;
-  font-weight: 400;
-  font-family: $mainFont;
-  font-size: 12px;
+  padding: 4px 4px 5px;
+  font-weight: 600;
+  font-family: $oxBodyFont;
+  font-size: 11px;
+  letter-spacing: 0.4px;
 }
 
 .inventory-slot-number {
-  background-color: white;
-  color: black;
-  height: 12px;
-  border-top-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  padding: 3px;
-  font-size: 12px;
-  font-family: $mainFont;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: $oxText;
+  border: 1px solid $oxBorder;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 5px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: $oxBodyFont;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
 .item-slot-wrapper {
@@ -397,17 +922,17 @@ body.inv-dragging {
 .tooltip-wrapper {
   pointer-events: none;
   display: flex;
-  background-color: $mainColor;
-  width: 200px;
-  padding: 8px;
+  background: $oxPanel;
+  backdrop-filter: blur(12px);
+  width: 220px;
+  padding: 12px;
   flex-direction: column;
-  min-width: 200px;
-  color: $textColor;
-  font-family: $mainFont;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.2);
-  border-style: inset;
-  border-width: 1px;
+  min-width: 220px;
+  color: $oxText;
+  font-family: $oxBodyFont;
+  border-radius: 10px;
+  border: 1px solid $oxAccentSoft;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   p {
     font-size: 12px;
     font-weight: 400;
@@ -466,8 +991,8 @@ body.inv-dragging {
 
 .hotbar-item-slot {
   @extend .inventory-slot;
-  width: $gridSize;
-  height: $gridSize;
+  width: $slotSize;
+  height: $slotSize;
 }
 
 .hotbar-slot-header-wrapper {
@@ -514,16 +1039,18 @@ body.inv-dragging {
 }
 
 .durability-bar {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   height: 3px;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .weight-bar {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px inset rgba(0, 0, 0, 0.1);
-  height: 0.8vh;
-  border-radius: 5%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $oxBorder;
+  height: 6px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
