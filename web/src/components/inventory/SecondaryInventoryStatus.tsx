@@ -34,6 +34,12 @@ const SecondaryInventoryStatus: React.FC<{ inventory: Inventory }> = ({ inventor
         <p className="ox-secondary-status-title">{hasItems ? inventory.label || copy.title : copy.title}</p>
         <p className="ox-secondary-status-desc">{copy.desc}</p>
       </div>
+      <div className="ox-secondary-status-dots" aria-hidden>
+        <span className="ox-dot ox-dot-active" />
+        <span className="ox-dot" />
+        <span className="ox-dot" />
+        <span className="ox-dot" />
+      </div>
     </div>
   );
 };

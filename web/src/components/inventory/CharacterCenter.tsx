@@ -9,9 +9,8 @@ const CharacterCenter: React.FC = () => {
   const leftInventory = useAppSelector(selectLeftInventory);
 
   return (
-    <div className="ox-center">
+    <div className="character-equipment">
       <ClothingEquipment side="left" inventory={leftInventory} />
-      <div className="ox-ped-space" aria-hidden />
       <ClothingEquipment side="right" inventory={leftInventory} />
     </div>
   );

@@ -8,11 +8,9 @@ const LeftInventory: React.FC = () => {
   const leftInventory = useAppSelector(selectLeftInventory);
 
   return (
-    <div className="ox-col ox-col-left">
-      <div className="ox-panel">
-        <InventoryHeader inventory={leftInventory} />
-        <InventoryGrid inventory={leftInventory} variant="player" />
-      </div>
+    <div className="ox-region ox-region-left">
+      <InventoryHeader inventory={leftInventory} />
+      <InventoryGrid inventory={leftInventory} variant="player" />
       <ActionBar />
     </div>
   );
