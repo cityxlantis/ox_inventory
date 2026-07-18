@@ -21,11 +21,12 @@ $oxPurple: #9b6dff;
 $oxHeadFont: 'Rajdhani', 'Oswald', sans-serif;
 $oxBodyFont: 'Inter', sans-serif;
 
-// Responsive slot sizing: clamp keeps the 5x5 grids visible at 1080p and scales down.
+// Size slots off viewport HEIGHT so all 5 rows always fit without scrolling,
+// with a viewport-width ceiling so columns never grow too wide.
 $gridCols: 5;
 $gridRows: 5;
-$slotSize: clamp(58px, 6.1vw, 108px);
-$slotGap: clamp(6px, 0.55vw, 10px);
+$slotSize: min(clamp(48px, 7.4vh, 92px), 5.6vw);
+$slotGap: clamp(5px, 0.7vh, 9px);
 
 $gridSize: 10.2vh;
 $gridGap: 2px;
@@ -169,7 +170,7 @@ body.inv-dragging {
   justify-items: center;
   gap: clamp(12px, 2vw, 48px);
   width: min(1720px, 96vw);
-  padding: 3.5vh 3vw 0;
+  padding: 2.5vh 3vw 0;
   box-sizing: border-box;
 }
 
@@ -179,7 +180,13 @@ body.inv-dragging {
   flex-direction: column;
   gap: clamp(10px, 1.4vh, 20px);
   width: 100%;
-  max-width: calc(#{$slotSize} * 5 + #{$slotGap} * 4 + 4px);
+  max-width: calc(#{$slotSize} * 5 + #{$slotGap} * 4 + 40px);
+  padding: clamp(14px, 1.8vh, 24px) clamp(14px, 1vw, 20px);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(10, 13, 18, 0.72), rgba(10, 13, 18, 0.55));
+  border: 1px solid $oxBorder;
+  backdrop-filter: blur(14px);
+  box-sizing: border-box;
 }
 
 .ox-right-panel {
